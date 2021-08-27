@@ -1,6 +1,6 @@
 package Entity.LivingThings.NPC;
 
-import Entity.LivingThings.GenericLivingEntity;
+import Entity.LivingThings.LivingEntity;
 
-public class Citizen extends GenericLivingEntity {
+public class Citizen extends LivingEntity {
 }

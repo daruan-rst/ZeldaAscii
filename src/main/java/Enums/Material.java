@@ -1,5 +1,5 @@
 package Enums;
 
 public enum Material {
-    WOOD,STEEL,GOLD,ANCIENT,BONE
+    WOOD,METALLIC,ANCIENT,BONE
 }

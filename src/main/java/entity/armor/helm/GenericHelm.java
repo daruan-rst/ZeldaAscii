@@ -1,6 +1,6 @@
 package entity.armor.helm;
 
-import entity.armor.genericArmor;
+import entity.armor.GenericArmor;
 
-public class GenericHelm extends genericArmor {
+public class GenericHelm extends GenericArmor {
 }

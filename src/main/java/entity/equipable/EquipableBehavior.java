@@ -4,6 +4,4 @@ public interface EquipableBehavior {
 
     void breakEquip();
 
-    void equipmentWornOut();
-
 }

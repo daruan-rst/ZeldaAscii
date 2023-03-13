@@ -1,4 +1,4 @@
 package entity.livingThings.attacker.Monsters;
 
-public class MonsterWithEquipment {
+public class MonsterWithEquipment extends Monster {
 }

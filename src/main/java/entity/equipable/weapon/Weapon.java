@@ -1,12 +1,12 @@
 package entity.equipable.weapon;
-import entity.equipable.genericEquipable;
+import entity.equipable.GenericEquipable;
 import entity.livingThings.attacker.Champion.Champion;
 import enums.WeaponType;
 import lombok.Data;
 
 
 @Data
-public abstract class Weapon extends genericEquipable {
+public abstract class Weapon extends GenericEquipable {
 
     Champion champion;
 

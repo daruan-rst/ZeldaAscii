@@ -1,5 +1,6 @@
 package events;
 
+import entity.Loot;
 import entity.equipable.GenericEquipable;
 import enums.EventType;
 
@@ -9,7 +10,7 @@ public class TreasureEvent extends Event {
         type = EventType.TREASURE;
     }
 
-    private GenericEquipable loot;
+    private Loot loot;
 
 
 }

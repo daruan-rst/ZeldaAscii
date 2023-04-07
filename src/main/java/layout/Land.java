@@ -1,5 +1,7 @@
 package layout;
 
+import enums.Weather;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,7 +20,7 @@ public class Land {
     static private final String PATH = "src/main/java/layout/mapTitle/";
 
 
-    public static void mapBorders(String areaName) {
+    public static void mapBorders(String areaName, Weather weather) {
         List<String> lines = getFileAsListOfStrings(PATH + areaName + ".txt");
         int name_height = lines.size();
         int name_width =  lines.isEmpty() ? 0 : lines.get(0).length();
@@ -32,11 +34,21 @@ public class Land {
                     }
                 } else if ((j == WIDTH && (i < HEIGHT) && i > 0) ||
                         (j == 0 && (i < HEIGHT) && i > NAME_BOX_HEIGHT + 1)) {
-                    System.out.print("║");
+                    if (i == HEIGHT -2 && j == WIDTH){
+                        System.out.print("╣");
+                    }else {
+                        System.out.print("║");
+                    }
                 } else if ((i == HEIGHT && (j < WIDTH) && j > 0) ||
-                        (i == 0 && (j < WIDTH) && j > NAME_BOX_WIDTH + 1)) {
-                    System.out.print("═");
-                } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0))) {
+                        (i == 0 && (j < WIDTH) && j > NAME_BOX_WIDTH + 1) ||
+                        (i == HEIGHT-2 && (j == WIDTH -1))) { // weather box
+                    if ((i == HEIGHT && (j == WIDTH -2))){ // weather box
+                        System.out.print("╩");
+                    }else {
+                        System.out.print("═");
+                    }
+                } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
+                    (i == HEIGHT-2 && (j == WIDTH -2))) { // weather box
                     System.out.print("╔");
                 } else if (i == 0 && j == WIDTH) {
                     System.out.print("╗");
@@ -48,11 +60,15 @@ public class Land {
                     System.out.print("╝");
                 } else if (i == 0 && j == NAME_BOX_WIDTH + 1) {
                     System.out.print("╔");
-                } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1)) {
+                } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1) ||
+                    (i == HEIGHT-1 && (j == WIDTH -2) )) { // weather box
                     System.out.print("║");
                 } else if (j < NAME_BOX_WIDTH + 1 && (i == NAME_BOX_HEIGHT + 1)) {
                     System.out.print("═");
-                } else {
+                } else if (j == WIDTH - 1 && (i == HEIGHT - 1)) {
+                    System.out.print(weather.getSymbol()); // weather box
+                }
+                else {
                     System.out.print("░");
                 }
             }

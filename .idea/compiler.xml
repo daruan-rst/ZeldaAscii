@@ -10,8 +10,5 @@
         <module name="BreathOfTheWildEngine" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BreathOfTheWildEngine" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>

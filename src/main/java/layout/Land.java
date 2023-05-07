@@ -2,14 +2,18 @@ package layout;
 
 import enums.Weather;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Land {
+
+    static final String MAP_FILE_PATH = "src/main/java/layout/maps/map.txt";
+    static final List<String[]> MAP = readMapFile();
 
     static final int HEIGHT = 50;
     static final int WIDTH = 150;
@@ -69,11 +73,32 @@ public class Land {
                     System.out.print(weather.getSymbol()); // weather box
                 }
                 else {
-                    System.out.print("░");
+//                    System.out.print("░");
+                    System.out.print(getCharacterFromMap(i, j));
                 }
             }
             System.out.print("\n");
         }
+    }
+
+    private static String getCharacterFromMap(int i, int j) {
+        return MAP.get(i)[j];
+
+    }
+
+    private static List<String[]> readMapFile() {
+
+        List<String[]> lines = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(MAP_FILE_PATH))){
+            String line = "";
+            while ((line = br.readLine()) != null){
+                String[] elements = line.split("");
+                lines.add(elements);
+            }
+        } catch (IOException ex){
+            ex.printStackTrace();
+        }
+        return lines;
     }
 
     private static String getCurrentFileChar(int i, int j, List<String> lines){

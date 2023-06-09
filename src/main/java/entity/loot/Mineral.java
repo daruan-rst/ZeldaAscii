@@ -1,4 +1,4 @@
 package entity.loot;
 
-public class Mineral {
+public class Mineral extends Loot {
 }

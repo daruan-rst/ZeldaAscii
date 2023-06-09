@@ -1,6 +1,6 @@
 package entity.armor;
 
-import entity.Loot;
+import entity.loot.Loot;
 import enums.ArmorType;
 
 public abstract class GenericArmor extends Loot {

@@ -15,7 +15,7 @@ public class Land {
     static final String MAP_FILE_PATH = "src/main/java/layout/maps/map.txt";
     static final List<String[]> MAP = readMapFile();
 
-    static final int HEIGHT = 50;
+    static final int HEIGHT = 22;
     static final int WIDTH = 150;
 
     static final int NAME_BOX_HEIGHT = 2;

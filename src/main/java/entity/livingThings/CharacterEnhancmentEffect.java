@@ -1,0 +1,46 @@
+package entity.livingThings;
+
+public enum CharacterEnhancmentEffect {
+
+    FIREPROOF,
+
+    UNFREEZABLE,
+
+    UNSHOCKABLE,
+
+    ELECTRIC_RESISTENCE,
+
+    HEAT_RESISTENCE,
+
+    COLD_RESISTENCE,
+
+    NEGATE_FALL_DAMAGE,
+
+    NIGHT_SPEED_UP,
+
+    STEALTH,
+
+    DAMAGE_UP,
+
+    BONE_ATTACK_UP,
+
+    CLIMBING_JUMP_STM_UP,
+
+    DISGUISE,
+
+    MASTER_SWORD_BEAM_UP,
+
+    SWIM_DASH_STAMINA_UP,
+
+    GUARDIAN_RESIST,
+
+    ANCIENT_PROFICENCY,
+
+    SAND_SPEED_UP,
+
+    SNOW_SPEED_UP,
+
+    SWIM_SPEED_UP
+
+
+}

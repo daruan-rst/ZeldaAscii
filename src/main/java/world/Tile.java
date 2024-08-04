@@ -9,7 +9,7 @@ import lombok.Setter;
 public class Tile {
     private boolean walkable;
     private boolean visible;
-    private boolean swimable;
+    private boolean swimmable;
     private boolean climbable;
 
     public Tile(boolean walkable) {
@@ -17,16 +17,5 @@ public class Tile {
         this.visible = false;
     }
 
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
 }
 

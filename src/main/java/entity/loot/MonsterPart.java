@@ -1,4 +1,4 @@
 package entity.loot;
 
-public class MonsterPart extends Food{
+public class MonsterPart extends Ingredient{
 }

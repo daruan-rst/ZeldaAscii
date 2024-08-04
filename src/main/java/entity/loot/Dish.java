@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Dish {
 
-    private List<Food> ingredients = Arrays.asList(new Food[5]);
+    private List<Ingredient> ingredients = Arrays.asList(new Food[5]);
 
     private FoodEffect effect;
 }

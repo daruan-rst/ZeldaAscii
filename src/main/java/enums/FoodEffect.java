@@ -9,5 +9,6 @@ public enum FoodEffect {
     HEAT_RESISTENCE,
     COLD_RESISTENCE,
     ELECTRIC_RESISTENCE,
+    FLAME_PROOF
 
 }

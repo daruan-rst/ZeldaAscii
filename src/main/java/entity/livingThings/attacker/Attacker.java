@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class Attacker extends LivingEntity {
+public abstract class Attacker extends LivingEntity implements BasicAttackerActions {
     protected int life;
     int baseDefense;
     int baseDamage;

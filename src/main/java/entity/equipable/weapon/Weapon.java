@@ -1,4 +1,5 @@
 package entity.equipable.weapon;
+import entity.equipable.EquipableBehavior;
 import entity.equipable.GenericEquipable;
 import entity.livingThings.attacker.Champion.Champion;
 import enums.WeaponType;
@@ -6,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-public abstract class Weapon extends GenericEquipable {
+public abstract class Weapon extends GenericEquipable implements EquipableBehavior {
 
     Champion champion;
 
@@ -20,8 +21,5 @@ public abstract class Weapon extends GenericEquipable {
             champion.getWeaponInventary().remove(
                     champion.getEquipedWeapon());
         }
-
-
-
     }
 }

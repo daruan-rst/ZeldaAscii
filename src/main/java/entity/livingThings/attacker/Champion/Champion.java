@@ -1,5 +1,7 @@
 package entity.livingThings.attacker.Champion;
 
+import entity.equipable.weapon.bow.Bow;
+import entity.equipable.weapon.combatWeapon.CombatWeapon;
 import entity.livingThings.attacker.EquipableAttacker;
 import entity.equipable.shield.Shield;
 import entity.equipable.weapon.Weapon;
@@ -19,13 +21,25 @@ public class Champion extends EquipableAttacker {
 
     @NonNull
     int weaponInventarySize;
+
     @Setter
     List<Weapon> weaponInventary = new ArrayList<>(this.weaponInventarySize);
-    Weapon equipedWeapon;
+
+    CombatWeapon equipedCombatWeapon;
+
+    @NonNull
+    int bowInventarySize;
+
+    @Setter
+    List<Weapon> bowInventary = new ArrayList<>(this.bowInventarySize);
+
+    Bow equipedBow;
 
     @NonNull
     int shieldInventarySize;
+
     List<Shield> shieldInventary = new ArrayList<>(this.shieldInventarySize);
+
     Shield equipedShield;
 
     public void createInventary(List<Weapon> weaponList, List<Shield> shieldList){

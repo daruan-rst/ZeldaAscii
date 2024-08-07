@@ -1,10 +1,10 @@
 package entity.livingThings.attacker.Champion;
 
+import entity.equipable.shield.Shield;
 import entity.equipable.weapon.bow.Bow;
 import entity.equipable.weapon.combatWeapon.CombatWeapon;
 import entity.livingThings.attacker.EquipableAttacker;
-import entity.equipable.shield.Shield;
-import entity.equipable.weapon.Weapon;
+import enums.Races;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -17,13 +17,14 @@ import java.util.List;
 public class Champion extends EquipableAttacker {
 
     final String name;
-    final private enums.Races race;
+
+    final private Races race;
 
     @NonNull
     int weaponInventarySize;
 
     @Setter
-    List<Weapon> weaponInventary = new ArrayList<>(this.weaponInventarySize);
+    List<CombatWeapon> weaponInventary = new ArrayList<>(this.weaponInventarySize);
 
     CombatWeapon equipedCombatWeapon;
 
@@ -31,7 +32,7 @@ public class Champion extends EquipableAttacker {
     int bowInventarySize;
 
     @Setter
-    List<Weapon> bowInventary = new ArrayList<>(this.bowInventarySize);
+    List<Bow> bowInventary = new ArrayList<>(this.bowInventarySize);
 
     Bow equipedBow;
 
@@ -42,7 +43,7 @@ public class Champion extends EquipableAttacker {
 
     Shield equipedShield;
 
-    public void createInventary(List<Weapon> weaponList, List<Shield> shieldList){
+    public void createInventary(List<CombatWeapon> weaponList, List<Shield> shieldList){
         this.shieldInventary = shieldList;
         this.weaponInventary = weaponList;
         equipWeapon(0);
@@ -51,13 +52,13 @@ public class Champion extends EquipableAttacker {
 
     public void equipWeapon(int i){
         if (i < weaponInventarySize){
-            this.equipedWeapon = weaponInventary.get(i);
+            this.equipedCombatWeapon = weaponInventary.get(i);
         }
     }
 
     public void dropWeapon() {
-        this.weaponInventary.remove(equipedWeapon);
-        this.equipedWeapon = null;
+        this.weaponInventary.remove(equipedCombatWeapon);
+        this.equipedCombatWeapon = null;
     }
 
     public void equipShield(int i){
@@ -72,7 +73,7 @@ public class Champion extends EquipableAttacker {
         this.equipedShield = null;
     }
 
-    private void useKorokSeedOnWeaponInventary(List<Weapon> weaponList){
+    private void useKorokSeedOnWeaponInventary(List<CombatWeapon> weaponList){
         this.weaponInventarySize++;
         this.weaponInventary = new ArrayList<>(this.weaponInventarySize);
         this.weaponInventary = List.copyOf(weaponList);

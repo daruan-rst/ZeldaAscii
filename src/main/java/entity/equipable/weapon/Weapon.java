@@ -19,7 +19,7 @@ public abstract class Weapon extends GenericEquipable implements EquipableBehavi
     public void breakEquip(){
         if(this.durability == 0){
             champion.getWeaponInventary().remove(
-                    champion.getEquipedWeapon());
+                    champion.getEquipedCombatWeapon());
         }
     }
 }

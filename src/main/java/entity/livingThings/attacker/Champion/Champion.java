@@ -20,7 +20,6 @@ public class Champion extends EquipableAttacker {
 
     final private Races race;
 
-    @NonNull
     int weaponInventarySize;
 
     @Setter

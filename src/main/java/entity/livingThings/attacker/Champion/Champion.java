@@ -3,6 +3,7 @@ package entity.livingThings.attacker.Champion;
 import entity.equipable.shield.Shield;
 import entity.equipable.weapon.bow.Bow;
 import entity.equipable.weapon.combatWeapon.CombatWeapon;
+import entity.livingThings.attacker.Attacker;
 import entity.livingThings.attacker.EquipableAttacker;
 import enums.Races;
 import lombok.*;
@@ -84,5 +85,19 @@ public class Champion extends EquipableAttacker {
         this.shieldInventary = List.copyOf(shieldList);
     }
 
+    @Override
+    public void attack(Attacker opponent) {
+        //TODO: CODE ME LATER
+    }
+
+    @Override
+    public void dodge(Attacker opponent) {
+        //TODO: CODE ME LATER
+    }
+
+    @Override
+    public void defend(Attacker opponent) {
+        //TODO: CODE ME LATER
+    }
 }
 

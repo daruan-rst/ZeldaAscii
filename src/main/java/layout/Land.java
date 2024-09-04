@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,7 @@ public class Land {
         int name_width =  lines.isEmpty() ? 0 : lines.get(0).length();
         for (int i = 0; i <= HEIGHT; i++) {
             for (int j = 0; j <= WIDTH; j++) {
+
                 if (i <= NAME_BOX_HEIGHT && j <= NAME_BOX_WIDTH) {
                     if (j < name_width ){
                         System.out.print(getCurrentFileChar(i, j, lines));
@@ -46,15 +48,19 @@ public class Land {
                 } else if ((i == HEIGHT && (j < WIDTH) && j > 0) ||
                         (i == 0 && (j < WIDTH) && j > NAME_BOX_WIDTH + 1) ||
                         (i == HEIGHT-2 && (j == WIDTH -1))) { // weather box
-                    if ((i == HEIGHT && (j == WIDTH -2))){ // weather box
+                    if ((i == HEIGHT && (j == WIDTH -2)) || // weather box
+                            (i == HEIGHT && (j == WIDTH -4))){
                         System.out.print("╩");
                     }else {
                         System.out.print("═");
                     }
                 } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
                     (i == HEIGHT-2 && (j == WIDTH -2))) { // weather box
+                    System.out.print("╦");
+                } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
+                        (i == HEIGHT-2 && (j == WIDTH -4))) { // stealth box
                     System.out.print("╔");
-                } else if (i == 0 && j == WIDTH) {
+                }else if (i == 0 && j == WIDTH) {
                     System.out.print("╗");
                 } else if (i == HEIGHT && j == 0) {
                     System.out.print("╚");
@@ -65,7 +71,8 @@ public class Land {
                 } else if (i == 0 && j == NAME_BOX_WIDTH + 1) {
                     System.out.print("╔");
                 } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1) ||
-                    (i == HEIGHT-1 && (j == WIDTH -2) )) { // weather box
+                    (i == HEIGHT-1 && (j == WIDTH -2) )|| // weather box
+                        (i == HEIGHT-1 && (j == WIDTH - 4)))  { // stealth box
                     System.out.print("║");
                 } else if (j < NAME_BOX_WIDTH + 1 && (i == NAME_BOX_HEIGHT + 1)) {
                     System.out.print("═");
@@ -73,7 +80,7 @@ public class Land {
                     System.out.print(weather.getSymbol()); // weather box
                 }
                 else {
-//                    System.out.print("░");
+//                    System.out.print(" ");
                     System.out.print(getCharacterFromMap(i, j));
                 }
             }
@@ -82,7 +89,9 @@ public class Land {
     }
 
     private static String getCharacterFromMap(int i, int j) {
-        return MAP.get(i)[j];
+        return i == HEIGHT / 2 && j == WIDTH / 2 ?
+                "\u1FFA" : // character
+                MAP.get(i)[j];
 
     }
 

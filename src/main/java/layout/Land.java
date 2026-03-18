@@ -36,7 +36,7 @@ public class Land {
                     if (j < name_width ){
                         System.out.print(getCurrentFileChar(i, j, lines));
                     }else{
-                        System.out.print(" ");
+                        System.out.print("");
                     }
                 } else if ((j == WIDTH && (i < HEIGHT) && i > 0) ||
                         (j == 0 && (i < HEIGHT) && i > NAME_BOX_HEIGHT + 1)) {
@@ -48,17 +48,17 @@ public class Land {
                 } else if ((i == HEIGHT && (j < WIDTH) && j > 0) ||
                         (i == 0 && (j < WIDTH) && j > NAME_BOX_WIDTH + 1) ||
                         (i == HEIGHT-2 && (j == WIDTH -1))) { // weather box
-                    if ((i == HEIGHT && (j == WIDTH -2)) || // weather box
-                            (i == HEIGHT && (j == WIDTH -4))){
+                    if ((i == HEIGHT && (j == WIDTH -5)) || // weather box
+                            (i == HEIGHT && (j == WIDTH -7))){
                         System.out.print("╩");
                     }else {
                         System.out.print("═");
                     }
                 } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
-                    (i == HEIGHT-2 && (j == WIDTH -2))) { // weather box
+                    (i == HEIGHT-2 && (j == WIDTH -5))) { // weather box
                     System.out.print("╦");
                 } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
-                        (i == HEIGHT-2 && (j == WIDTH -4))) { // stealth box
+                        (i == HEIGHT-2 && (j == WIDTH -7))) { // stealth box
                     System.out.print("╔");
                 }else if (i == 0 && j == WIDTH) {
                     System.out.print("╗");
@@ -71,12 +71,18 @@ public class Land {
                 } else if (i == 0 && j == NAME_BOX_WIDTH + 1) {
                     System.out.print("╔");
                 } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1) ||
-                    (i == HEIGHT-1 && (j == WIDTH -2) )|| // weather box
-                        (i == HEIGHT-1 && (j == WIDTH - 4)))  { // stealth box
+                    (i == HEIGHT-1 && (j == WIDTH -5) )|| // weather box
+                        (i == HEIGHT-1 && (j == WIDTH - 7)))  { // stealth box
                     System.out.print("║");
                 } else if (j < NAME_BOX_WIDTH + 1 && (i == NAME_BOX_HEIGHT + 1)) {
                     System.out.print("═");
-                } else if (j == WIDTH - 1 && (i == HEIGHT - 1)) {
+                } else if (
+                        ((j > WIDTH - 5) && (j < WIDTH - 3))
+                                &&
+                                ((i == HEIGHT - 1))
+
+                )
+                {
                     System.out.print(weather.getSymbol()); // weather box
                 }
                 else {

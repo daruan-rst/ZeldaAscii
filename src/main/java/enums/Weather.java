@@ -1,12 +1,14 @@
 package enums;
 
 public enum Weather {
-    HEAT("H"),
-    RAIN("R"),
-    SANDSTORM("S"),
+
+    CLEAR("☁"),
+    HEAT("☀"),
+    RAIN("\uD83C\uDF27"),
+    SANDSTORM("⛆"),
     SCORCHING_CLIMATE("S"),
-    SNOW("S"),
-    THUNDERSTORM("T");
+    SNOW("❅"),
+    THUNDERSTORM("⚡");
 
     private String symbol;
 

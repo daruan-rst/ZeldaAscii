@@ -1,20 +1,20 @@
 package layout;
 
+import enums.HyruleRegion;
 import enums.Weather;
+import world.Tile;
+import world.WorldBuilder;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Land {
 
-    static final String MAP_FILE_PATH = "src/main/java/layout/maps/map.txt";
-    static final List<String[]> MAP = readMapFile();
+    // Removed the static MAP_FILE_PATH and the readMapFile() method
 
     static final int HEIGHT = 22;
     static final int WIDTH = 150;
@@ -24,11 +24,16 @@ public class Land {
 
     static private final String PATH = "src/main/java/layout/mapTitle/";
 
-
-    public static void mapBorders(String areaName, Weather weather) {
+    public static void mapBorders(HyruleRegion region, Weather weather) {
+        // Derive the string name from the enum to load the correct ASCII title art (e.g., eldin.txt)
+        String areaName = region.name().toLowerCase();
         List<String> lines = getFileAsListOfStrings(PATH + areaName + ".txt");
-        int name_height = lines.size();
         int name_width =  lines.isEmpty() ? 0 : lines.get(0).length();
+
+        // Dynamically build our region map!
+        WorldBuilder worldBuilder = new WorldBuilder();
+        Tile[][] generatedMap = worldBuilder.buildRegion(region);
+
         for (int i = 0; i <= HEIGHT; i++) {
             for (int j = 0; j <= WIDTH; j++) {
 
@@ -36,7 +41,8 @@ public class Land {
                     if (j < name_width ){
                         System.out.print(getCurrentFileChar(i, j, lines));
                     }else{
-                        System.out.print("");
+                        // I changed this from "" to " " to keep the grid aligned properly
+                        System.out.print(" ");
                     }
                 } else if ((j == WIDTH && (i < HEIGHT) && i > 0) ||
                         (j == 0 && (i < HEIGHT) && i > NAME_BOX_HEIGHT + 1)) {
@@ -55,7 +61,7 @@ public class Land {
                         System.out.print("═");
                     }
                 } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
-                    (i == HEIGHT-2 && (j == WIDTH -5))) { // weather box
+                        (i == HEIGHT-2 && (j == WIDTH -5))) { // weather box
                     System.out.print("╦");
                 } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
                         (i == HEIGHT-2 && (j == WIDTH -7))) { // stealth box
@@ -71,7 +77,7 @@ public class Land {
                 } else if (i == 0 && j == NAME_BOX_WIDTH + 1) {
                     System.out.print("╔");
                 } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1) ||
-                    (i == HEIGHT-1 && (j == WIDTH -5) )|| // weather box
+                        (i == HEIGHT-1 && (j == WIDTH -5) )|| // weather box
                         (i == HEIGHT-1 && (j == WIDTH - 7)))  { // stealth box
                     System.out.print("║");
                 } else if (j < NAME_BOX_WIDTH + 1 && (i == NAME_BOX_HEIGHT + 1)) {
@@ -86,34 +92,19 @@ public class Land {
                     System.out.print(weather.getSymbol()); // weather box
                 }
                 else {
-//                    System.out.print(" ");
-                    System.out.print(getCharacterFromMap(i, j));
+                    // Pass our dynamic map array to fetch the correct symbol
+                    System.out.print(getCharacterFromMap(i, j, generatedMap));
                 }
             }
             System.out.print("\n");
         }
     }
 
-    private static String getCharacterFromMap(int i, int j) {
+    private static String getCharacterFromMap(int i, int j, Tile[][] map) {
+        // If it's the center, draw the character. Otherwise, get the terrain symbol.
         return i == HEIGHT / 2 && j == WIDTH / 2 ?
-                "\u1FFA" : // character
-                MAP.get(i)[j];
-
-    }
-
-    private static List<String[]> readMapFile() {
-
-        List<String[]> lines = new ArrayList<>();
-        try(BufferedReader br = new BufferedReader(new FileReader(MAP_FILE_PATH))){
-            String line = "";
-            while ((line = br.readLine()) != null){
-                String[] elements = line.split("");
-                lines.add(elements);
-            }
-        } catch (IOException ex){
-            ex.printStackTrace();
-        }
-        return lines;
+                "\u1FFA" :
+                Character.toString(map[i][j].getTerrainType().getSymbol());
     }
 
     private static String getCurrentFileChar(int i, int j, List<String> lines){
@@ -125,7 +116,7 @@ public class Land {
         try {
             lines = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Could not read map title art: " + fileName);
         }
         return lines;
     }

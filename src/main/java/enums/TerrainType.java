@@ -3,11 +3,11 @@ package enums;
 public enum TerrainType {
     GRASS('.'),
     WATER('~'),
-    SAND('≈'),
-    ICE_MOUNTAIN('∆'),
+    SAND('='),
+    ICE_MOUNTAIN('*'),
     MOUNTAIN('^'),
     FOREST('♣'),
-    LAVA('♨');
+    LAVA('#');
 
     private final char symbol;
 

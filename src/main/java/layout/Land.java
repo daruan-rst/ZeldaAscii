@@ -1,5 +1,6 @@
 package layout;
 
+import config.GlobalConfig;
 import enums.HyruleRegion;
 import enums.Weather;
 import world.Tile;
@@ -14,101 +15,136 @@ import java.util.List;
 
 public class Land {
 
-    // Removed the static MAP_FILE_PATH and the readMapFile() method
-
-    static final int HEIGHT = 22;
-    static final int WIDTH = 150;
-
-    static final int NAME_BOX_HEIGHT = 2;
-    static final int NAME_BOX_WIDTH = 20;
-
     static private final String PATH = "src/main/java/layout/mapTitle/";
 
-    public static void mapBorders(HyruleRegion region, Weather weather) {
-        // Derive the string name from the enum to load the correct ASCII title art (e.g., eldin.txt)
-        String areaName = region.name().toLowerCase();
-        List<String> lines = getFileAsListOfStrings(PATH + areaName + ".txt");
-        int name_width =  lines.isEmpty() ? 0 : lines.get(0).length();
+    // ANSI Color Codes
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
-        // Dynamically build our region map!
+    public static void mapBorders(HyruleRegion region, Weather weather) {
         WorldBuilder worldBuilder = new WorldBuilder();
         Tile[][] generatedMap = worldBuilder.buildRegion(region);
 
-        for (int i = 0; i <= HEIGHT; i++) {
-            for (int j = 0; j <= WIDTH; j++) {
+        String[][] screenBuffer = new String[GlobalConfig.MAP_HEIGHT][GlobalConfig.MAP_WIDTH];
 
-                if (i <= NAME_BOX_HEIGHT && j <= NAME_BOX_WIDTH) {
-                    if (j < name_width ){
-                        System.out.print(getCurrentFileChar(i, j, lines));
-                    }else{
-                        // I changed this from "" to " " to keep the grid aligned properly
-                        System.out.print(" ");
-                    }
-                } else if ((j == WIDTH && (i < HEIGHT) && i > 0) ||
-                        (j == 0 && (i < HEIGHT) && i > NAME_BOX_HEIGHT + 1)) {
-                    if (i == HEIGHT -2 && j == WIDTH){
-                        System.out.print("╣");
-                    }else {
-                        System.out.print("║");
-                    }
-                } else if ((i == HEIGHT && (j < WIDTH) && j > 0) ||
-                        (i == 0 && (j < WIDTH) && j > NAME_BOX_WIDTH + 1) ||
-                        (i == HEIGHT-2 && (j == WIDTH -1))) { // weather box
-                    if ((i == HEIGHT && (j == WIDTH -5)) || // weather box
-                            (i == HEIGHT && (j == WIDTH -7))){
-                        System.out.print("╩");
-                    }else {
-                        System.out.print("═");
-                    }
-                } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
-                        (i == HEIGHT-2 && (j == WIDTH -5))) { // weather box
-                    System.out.print("╦");
-                } else if ((i == NAME_BOX_HEIGHT + 1 && (j == 0)) ||
-                        (i == HEIGHT-2 && (j == WIDTH -7))) { // stealth box
-                    System.out.print("╔");
-                }else if (i == 0 && j == WIDTH) {
-                    System.out.print("╗");
-                } else if (i == HEIGHT && j == 0) {
-                    System.out.print("╚");
-                } else if (i == HEIGHT && j == WIDTH) {
-                    System.out.print("╝");
-                } else if (i == NAME_BOX_HEIGHT + 1 && j == NAME_BOX_WIDTH + 1) {
-                    System.out.print("╝");
-                } else if (i == 0 && j == NAME_BOX_WIDTH + 1) {
-                    System.out.print("╔");
-                } else if (i < NAME_BOX_HEIGHT + 1 && (j == NAME_BOX_WIDTH + 1) ||
-                        (i == HEIGHT-1 && (j == WIDTH -5) )|| // weather box
-                        (i == HEIGHT-1 && (j == WIDTH - 7)))  { // stealth box
-                    System.out.print("║");
-                } else if (j < NAME_BOX_WIDTH + 1 && (i == NAME_BOX_HEIGHT + 1)) {
-                    System.out.print("═");
-                } else if (
-                        ((j > WIDTH - 5) && (j < WIDTH - 3))
-                                &&
-                                ((i == HEIGHT - 1))
-
-                )
-                {
-                    System.out.print(weather.getSymbol()); // weather box
-                }
-                else {
-                    // Pass our dynamic map array to fetch the correct symbol
-                    System.out.print(getCharacterFromMap(i, j, generatedMap));
-                }
+        // 1. Fill Map
+        for (int y = 0; y < GlobalConfig.MAP_HEIGHT; y++) {
+            for (int x = 0; x < GlobalConfig.MAP_WIDTH; x++) {
+                screenBuffer[y][x] = String.valueOf(generatedMap[y][x].getTerrainType().getSymbol());
             }
-            System.out.print("\n");
+        }
+
+        // 2. Overlays
+        drawOuterBorders(screenBuffer);
+        drawRegionNameBox(screenBuffer, region);
+        drawWeatherAndTempBoxes(screenBuffer, region, weather);
+
+        // 3. Draw Player
+        screenBuffer[GlobalConfig.MAP_HEIGHT / 2][GlobalConfig.MAP_WIDTH / 2] = "\u1FFA";
+
+        // 4. Print Map
+        for (int y = 0; y < GlobalConfig.MAP_HEIGHT; y++) {
+            for (int x = 0; x < GlobalConfig.MAP_WIDTH; x++) {
+                System.out.print(screenBuffer[y][x]);
+            }
+            System.out.println();
         }
     }
 
-    private static String getCharacterFromMap(int i, int j, Tile[][] map) {
-        // If it's the center, draw the character. Otherwise, get the terrain symbol.
-        return i == HEIGHT / 2 && j == WIDTH / 2 ?
-                "\u1FFA" :
-                Character.toString(map[i][j].getTerrainType().getSymbol());
+    private static void drawOuterBorders(String[][] buffer) {
+        for (int x = 0; x < GlobalConfig.MAP_WIDTH; x++) {
+            buffer[0][x] = "═";
+            buffer[GlobalConfig.MAP_HEIGHT - 1][x] = "═";
+        }
+        for (int y = 0; y < GlobalConfig.MAP_HEIGHT; y++) {
+            buffer[y][0] = "║";
+            buffer[y][GlobalConfig.MAP_WIDTH - 1] = "║";
+        }
+        buffer[0][0] = "╔";
+        buffer[0][GlobalConfig.MAP_WIDTH - 1] = "╗";
+        buffer[GlobalConfig.MAP_HEIGHT - 1][0] = "╚";
+        buffer[GlobalConfig.MAP_HEIGHT - 1][GlobalConfig.MAP_WIDTH - 1] = "╝";
     }
 
-    private static String getCurrentFileChar(int i, int j, List<String> lines){
-        return lines.isEmpty() ? " " : Character.toString(lines.get(i).charAt(j));
+    private static void drawRegionNameBox(String[][] buffer, HyruleRegion region) {
+        String areaName = region.name().toLowerCase();
+        List<String> artLines = getFileAsListOfStrings(PATH + areaName + ".txt");
+
+        if (artLines.isEmpty()) return;
+
+        int artHeight = artLines.size();
+        int artWidth = 0;
+        for (String line : artLines) {
+            artWidth = Math.max(artWidth, line.length());
+        }
+
+        int boxBottom = artHeight + 1;
+        int boxRight = artWidth + 2;
+
+        for (int y = 1; y < boxBottom; y++) {
+            for (int x = 1; x < boxRight; x++) {
+                buffer[y][x] = " ";
+            }
+        }
+
+        for (int y = 0; y < artHeight; y++) {
+            String line = artLines.get(y);
+            for (int x = 0; x < line.length(); x++) {
+                buffer[y + 1][x + 1] = String.valueOf(line.charAt(x));
+            }
+        }
+
+        for (int x = 1; x < boxRight; x++) buffer[boxBottom][x] = "═";
+        for (int y = 1; y < boxBottom; y++) buffer[y][boxRight] = "║";
+
+        buffer[0][boxRight] = "╦";
+        buffer[boxBottom][0] = "╠";
+        buffer[boxBottom][boxRight] = "╝";
+    }
+
+    private static void drawWeatherAndTempBoxes(String[][] buffer, HyruleRegion region, Weather weather) {
+        int boxTop = GlobalConfig.MAP_HEIGHT - 3;
+        int tempLeftEdge = GlobalConfig.MAP_WIDTH - 12; // Adjusted sizes for just symbols
+        int middleEdge = GlobalConfig.MAP_WIDTH - 6;
+        int rightEdge = GlobalConfig.MAP_WIDTH - 1;
+
+        for (int y = boxTop + 1; y < GlobalConfig.MAP_HEIGHT - 1; y++) {
+            for (int x = tempLeftEdge + 1; x < rightEdge; x++) {
+                if (x != middleEdge) buffer[y][x] = " ";
+            }
+        }
+
+        for (int x = tempLeftEdge + 1; x < rightEdge; x++) buffer[boxTop][x] = "═";
+
+        for (int y = boxTop + 1; y < GlobalConfig.MAP_HEIGHT - 1; y++) {
+            buffer[y][tempLeftEdge] = "║";
+            buffer[y][middleEdge] = "║";
+        }
+
+        buffer[boxTop][tempLeftEdge] = "╔";
+        buffer[boxTop][middleEdge] = "╦";
+        buffer[boxTop][rightEdge] = "╣";
+        buffer[GlobalConfig.MAP_HEIGHT - 1][tempLeftEdge] = "╩";
+        buffer[GlobalConfig.MAP_HEIGHT - 1][middleEdge] = "╩";
+
+        // Inject Dynamic Colored Temperature Symbol
+        String color = getTemperatureColor(region, weather);
+        buffer[boxTop + 1][tempLeftEdge + 3] = color + "●" + ANSI_RESET;
+
+        // Inject Weather Symbol
+        buffer[boxTop + 1][middleEdge + 2] = weather.getSymbol();
+    }
+
+    private static String getTemperatureColor(HyruleRegion region, Weather weather) {
+        if (region == HyruleRegion.ELDIN || weather == Weather.SCORCHING_CLIMATE) return ANSI_RED;
+        if (region == HyruleRegion.GERUDO || weather == Weather.HEAT) return ANSI_YELLOW; // Acts as pale yellow/orange
+        if (region == HyruleRegion.HEBRA || weather == Weather.SNOW) return ANSI_BLUE;
+        if (weather == Weather.THUNDERSTORM || weather == Weather.RAIN) return ANSI_CYAN; // Light Blue
+        return ANSI_WHITE;
     }
 
     private static List<String> getFileAsListOfStrings(String fileName) {
@@ -116,7 +152,7 @@ public class Land {
         try {
             lines = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            System.err.println("Could not read map title art: " + fileName);
+            System.err.println("Could not load map title art from: " + fileName);
         }
         return lines;
     }

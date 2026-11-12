@@ -1,8 +1,7 @@
-import enums.Weather;
 import layout.Land;
 
 import static enums.HyruleRegion.ELDIN;
-import static enums.Weather.*;
+import static enums.Weather.RAIN;
 
 public class Main {
 

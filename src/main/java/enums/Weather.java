@@ -4,10 +4,10 @@ public enum Weather {
 
     CLEAR("☁"),
     HEAT("☀"),
-    RAIN("\uD83C\uDF27"),
-    SANDSTORM("⛆"),
-    SCORCHING_CLIMATE("S"),
-    SNOW("❅"),
+    RAIN("☂"),
+    SANDSTORM("≈"),
+    SCORCHING_CLIMATE("!"),
+    SNOW("*"),
     THUNDERSTORM("⚡");
 
     private String symbol;

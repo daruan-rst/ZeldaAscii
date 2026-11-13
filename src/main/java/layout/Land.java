@@ -31,9 +31,9 @@ public class Land {
 
         String[][] screenBuffer = new String[GlobalConfig.MAP_HEIGHT][GlobalConfig.MAP_WIDTH];
 
-        // 1. Fill Map
-        for (int y = 0; y < GlobalConfig.MAP_HEIGHT; y++) {
-            for (int x = 0; x < GlobalConfig.MAP_WIDTH; x++) {
+        // 1. Fill map inside borders
+        for (int y = 1; y < GlobalConfig.MAP_HEIGHT - 1; y++) {
+            for (int x = 1; x < GlobalConfig.MAP_WIDTH - 1; x++) {
                 screenBuffer[y][x] = String.valueOf(generatedMap[y][x].getTerrainType().getSymbol());
             }
         }
@@ -44,12 +44,17 @@ public class Land {
         drawWeatherAndTempBoxes(screenBuffer, region, weather);
 
         // 3. Draw Player
-        screenBuffer[GlobalConfig.MAP_HEIGHT / 2][GlobalConfig.MAP_WIDTH / 2] = "\u1FFA";
+        int playerY = GlobalConfig.MAP_HEIGHT / 2;
+        int playerX = GlobalConfig.MAP_WIDTH / 2;
+        if (playerY > 0 && playerY < GlobalConfig.MAP_HEIGHT - 1 && playerX > 0 && playerX < GlobalConfig.MAP_WIDTH - 1) {
+            screenBuffer[playerY][playerX] = "\u1FFA";
+        }
 
         // 4. Print Map
         for (int y = 0; y < GlobalConfig.MAP_HEIGHT; y++) {
             for (int x = 0; x < GlobalConfig.MAP_WIDTH; x++) {
-                System.out.print(screenBuffer[y][x]);
+                String cell = screenBuffer[y][x];
+                System.out.print(cell == null ? " " : cell);
             }
             System.out.println();
         }
